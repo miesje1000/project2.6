@@ -1,20 +1,25 @@
-#database stuf
+#database aanmaken of openen
 import sqlite3
 
-sqlite_file = 'specialismen_db.sqlite'    # name of the sqlite database file
-tabel_ha = 'Huisartsen'	# name of the table to be created
-ID_kolom = 'ID' # name of the column
-field_type = 'TEXT'  # column data type
-# Connecting to the database file
+db = sqlite3.connect('specialismen_db.sqlite')
 
-conn = sqlite3.connect(specialismen_db.sqlite)
-c = conn.cursor()
+#tabel voor Huisartsen aanmaken
+cursor = db.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Huisartsen(id INTEGER PRIMARY KEY, achternaam TEXT,
+                       voorletters TEXT, tussenvoegsel TEXT, telnr TEXT)
+''')
 
-for row in ha_data:
-    c.execute("INSERT INTO Huisartsen VALUES (row[3], row[4], row[5], row[6], row[14])")
+#data uit ha_data inlezen in tabel Huisartsen
+for lst in ha_data:
+    cursor.execute('''INSERT INTO Huisartsen(id, achternaam, voorletters, tussenvoegsel, telnr)
+                  VALUES(?,?,?,?,?)''', (lst[3], lst[4], lst[5], lst[6], lst[14]))
+cursor.execute('''INSERT INTO Huisartsen(id, achternaam, voorletters, tussenvoegsel, telnr)
+                  VALUES(?,?,?,?,?)''', (ha2[3], ha2[4], ha2[5], ha2[6], ha2[14]))
 
-for row in c.execute('SELECT * FROM Huisartsen'):
+for row in cursor.execute('SELECT * FROM Huisartsen'):
         print(row)
-# Committing changes and closing the connection to the database file
-conn.commit()
-conn.close()
+        
+cursor.execute('''DROP TABLE Huisartsen''')
+
+db.commit()
