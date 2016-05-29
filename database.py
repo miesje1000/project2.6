@@ -20,6 +20,7 @@ cursor.execute('''INSERT INTO Huisartsen(id, achternaam, voorletters, tussenvoeg
 for row in cursor.execute('SELECT * FROM Huisartsen'):
         print(row)
         
+#LET OP: dit alleen runnen als je de tabel wilt verwijderen
 cursor.execute('''DROP TABLE Huisartsen''')
 
 db.commit()
