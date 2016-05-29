@@ -14,8 +14,6 @@ cursor.execute('''
 for lst in ha_data:
     cursor.execute('''INSERT INTO Huisartsen(id, achternaam, voorletters, tussenvoegsel, telnr)
                   VALUES(?,?,?,?,?)''', (lst[3], lst[4], lst[5], lst[6], lst[14]))
-cursor.execute('''INSERT INTO Huisartsen(id, achternaam, voorletters, tussenvoegsel, telnr)
-                  VALUES(?,?,?,?,?)''', (ha2[3], ha2[4], ha2[5], ha2[6], ha2[14]))
 
 for row in cursor.execute('SELECT * FROM Huisartsen'):
         print(row)
