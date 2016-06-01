@@ -1,10 +1,9 @@
-#install geocoder
-#import geocoder
 class LatLonConverter:
    def __init__(self,haData,haAdres):
        self.haData = haData
        self.haAdres = haAdres
-  
+
+#Maak lijsten aan om adresgegevens op te slaan en verzamel ze in 1 lijst
 haData = []
 haStraat = []
 haNummer = []
@@ -16,7 +15,7 @@ def zoekhuisarts(lst):
         if col[2] == int('01'):
             haData.append(col)
         
-zoekhuisarts(Vektis2csv)
+zoekhuisarts(tabelcsv)
 
 def adresVerzamelaar(lst):
     for x in lst:
@@ -33,46 +32,27 @@ def lijstmaker(lijst1,lijst2,lijst3,lijst4):
             haAdres.append(item)
 
 lijstmaker(haStraat,haNummer,haPostcode,haWoonplaats)
-#print(haAdres[0],haAdres[11221],haAdres[22442],haAdres[33663])
-#print(haAdres[0:len(haAdres):11221]) 
-#print(haAdres[1:len(haAdres)+1:11221])
-#print(haAdres)
 
-def adresPrinter(lijstje):
-    for i in range(11221):
-        print(lijstje[i:len(lijstje)+i:11221]) 
-        
-adresPrinter(haAdres)
-
-#Vanaf hieronder toegevoegd door Michelle
-lijstmaker(haStraat,haNummer,haPostcode,haWoonplaats)
+#Sorteer de lijst zodat een volledig adres als list wordt opgeslagen
 haAdressort = []
 def adresSort(lijstje):
     for i in range(11221):
         haAdressort.append(lijstje[i:len(lijstje)+i:11221]) 
-        
+      
 adresSort(haAdres)
+
+#Haal de coördinaten op van de adressen als ze bekend zijn
 adresCor = []
 def adresGeo(lst):
     from geopy.geocoders import Nominatim
     geolocator = Nominatim()
     for item in lst:
-        location = geolocator.geocode(item)
-        locatieCor = [location.latitude, location.longitude]
-        adresCor.append(locatieCor)
-        
-adresGeo(haAdressort)
-print(haAdressort[1])
+         location = geolocator.geocode(item)
+         if location:
+             locatieCor = [location.latitude, location.longitude]
+             adresCor.append(locatieCor)
+         else:
+             adresCor.append("onbekend")
 
-adresCor = []
-mini = [haAdressort[0], haAdressort[1], haAdressort[2], haAdressort[3]]
-def test(lst):
-    for item in lst:
-        from geopy.geocoders import Nominatim
-        geolocator = Nominatim()
-        location = geolocator.geocode(item)
-        locatieCor = [location.latitude, location.longitude]
-        adresCor.append(locatieCor)
-    
-test(mini)
+adresGeo(haAdressort)
         
