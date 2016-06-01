@@ -43,4 +43,36 @@ def adresPrinter(lijstje):
         print(lijstje[i:len(lijstje)+i:11221]) 
         
 adresPrinter(haAdres)
+
+#Vanaf hieronder toegevoegd door Michelle
+lijstmaker(haStraat,haNummer,haPostcode,haWoonplaats)
+haAdressort = []
+def adresSort(lijstje):
+    for i in range(11221):
+        haAdressort.append(lijstje[i:len(lijstje)+i:11221]) 
+        
+adresSort(haAdres)
+adresCor = []
+def adresGeo(lst):
+    from geopy.geocoders import Nominatim
+    geolocator = Nominatim()
+    for item in lst:
+        location = geolocator.geocode(item)
+        locatieCor = [location.latitude, location.longitude]
+        adresCor.append(locatieCor)
+        
+adresGeo(haAdressort)
+print(haAdressort[1])
+
+adresCor = []
+mini = [haAdressort[0], haAdressort[1], haAdressort[2], haAdressort[3]]
+def test(lst):
+    for item in lst:
+        from geopy.geocoders import Nominatim
+        geolocator = Nominatim()
+        location = geolocator.geocode(item)
+        locatieCor = [location.latitude, location.longitude]
+        adresCor.append(locatieCor)
+    
+test(mini)
         
