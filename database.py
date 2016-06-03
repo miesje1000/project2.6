@@ -22,3 +22,4 @@ for row in cursor.execute('SELECT * FROM Huisartsen'):
 cursor.execute('''DROP TABLE Huisartsen''')
 
 db.commit()
+cursor.close()
