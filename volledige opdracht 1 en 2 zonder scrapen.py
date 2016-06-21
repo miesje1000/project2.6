@@ -1,5 +1,7 @@
 #importeer eerst handmatig het bestand met de data, op mijn computer tabelcsv
-
+class adresMetURLEnLatLon:
+   def __init__(self,haData):
+       self.haData = haData
 #filtreer de huisartsen uit het bestand 
 haData = []
 def zoekhuisarts(lst):
@@ -36,8 +38,8 @@ lijstmaker(haStraat,haNummer,haPostcode,haWoonplaats)
 #Sorteer de lijst zodat een volledig adres als list wordt opgeslagen
 haAdressort = []
 def adresSort(lijstje):
-    for i in range(11221):
-        haAdressort.append(lijstje[i:len(lijstje)+i:11221]) 
+    for i in range(len(haData)):
+        haAdressort.append(lijstje[i:len(lijstje)+i:len(haData)]) 
       
 adresSort(haAdres)
 
@@ -642,8 +644,8 @@ idEnCor(haId, adresCor)
 
 haCorsort = []
 def corSort(lijstje):
-    for i in range(11221):
-        haCorsort.append(lijstje[i:len(lijstje)+i:11221])
+    for i in range(len(haData)):
+        haCorsort.append(lijstje[i:len(lijstje)+i:len(haData)])
         
 corSort(adresCorID)
 
