@@ -1,6 +1,8 @@
 ''' Importeer handmatig de bestanden waarin de zorgverleners staan, 
 de praktijken en de koppeling tussen deze twee.'''
 
+'''Importeer de huisartsen uit het bestand met zorgverleners
+en maak van voorletters, tussenvoegsel(s) en achternaam één list.'''
 haData = []
 def zoekhuisarts(lst):
     for col in lst:
@@ -19,6 +21,9 @@ for item in haData:
         item.remove(item[5])
         item.remove(item[6])
 
+'''Importeer de huisartspraktijken uit het bestand met praktijken,
+gebruik het nummer, naam deel één en naam deel twee. Maak van de twee
+naam delen één list.''' 
 praktijk = []
 def zoekpraktijk(lst):
     for col in lst:
@@ -26,37 +31,6 @@ def zoekpraktijk(lst):
             praktijk.append(col)
 
 zoekpraktijk(praktijkcsv)
-
-koppel = []
-def zoekkoppel(lst):
-    for col in lst:
-        if col[2] == int('01'):
-            koppel.append(col)
-
-zoekkoppel(koppelcsv)
-
-kopHa = []
-kopPr = []
-
-for item in koppel:
-    kopHa.append(item[3])
-    kopPr.append(item[4])
-    
-kopHaPr = []
-def haEnPr(lst1, lst2):
-    for item in lst1:
-        kopHaPr.append(item)
-    for item in lst2:
-        kopHaPr.append(item)
-        
-haEnPr(kopHa, kopPr)
-
-koppelSort = []
-def kopSort(lst):
-    for i in range(12228):
-        koppelSort.append(lst[i:24456+i:12228])
-        
-kopSort(kopHaPr)
 
 prNr = []
 prNa1 = []
@@ -89,7 +63,42 @@ for item in prSort:
     if item[2] != '(null)':
         item[1] = item[1] + ' ' + item[2]
     item.remove(item[2])
+
+'''Zoek de huisartsen uit het bestand met koppelingen.
+Maak een lijst met de huisartsen en bijbehorende praktijk(en).'''
+koppel = []
+def zoekkoppel(lst):
+    for col in lst:
+        if col[2] == int('01'):
+            koppel.append(col)
+
+zoekkoppel(koppelcsv)
+
+kopHa = []
+kopPr = []
+
+for item in koppel:
+    kopHa.append(item[3])
+    kopPr.append(item[4])
     
+kopHaPr = []
+def haEnPr(lst1, lst2):
+    for item in lst1:
+        kopHaPr.append(item)
+    for item in lst2:
+        kopHaPr.append(item)
+        
+haEnPr(kopHa, kopPr)
+
+koppelSort = []
+def kopSort(lst):
+    for i in range(12228):
+        koppelSort.append(lst[i:24456+i:12228])
+        
+kopSort(kopHaPr)
+
+'''Vervang in de lijst met koppelingen de nummers van de huisartsen en
+praktijken door de namen van de huisartsen en praktijken.'''
 haPrNaam = []
 def koppeling(lst1, lst2, lst3):
     for item in lst1:
