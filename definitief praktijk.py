@@ -1,5 +1,5 @@
 '''Laadt eerst het bestand praktijkcsv in. Daarna kun je 
-een lijst met naam, telefoonnummer en adres maken.'''
+een lijst met nummer, naam en telefoonnummer maken.'''
 praktijk = []
 def zoekpraktijk(lst):
     for col in lst:
@@ -69,14 +69,64 @@ def koppeling(lst1, lst2):
 
 koppeling(prSort, prakAdres)
 
+'''Maak een tabel aan in de database genaamd Praktijken en voeg de 
+naam, het telefoonnummer en het adres toe.'''
+import sqlite3
+
+db = sqlite3.connect('specialismen_db.sqlite')
+
+#tabel voor Huisartsen aanmaken
+cursor = db.cursor()
+cursor.execute('''
+   CREATE TABLE IF NOT EXISTS Praktijken(naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
+''')
+
+#data uit haData en adresCor inlezen in tabel Huisartsen
+for lst in prSort:
+   cursor.execute('''INSERT INTO Praktijken(naam, telnr, straat, huisnummer, toevoeging, postcode, woonplaats)
+                VALUES(?,?,?,?,?,?,?)''', (lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7]))
+
+#wijzigingen opslaan en connectie met db verbreken
+db.commit()
+cursor.close()
+
+'''Maak lijsten aan om adresgegevens op te slaan en verzamel 
+ze in 1 lijst. Met deze lijst kunnen de coordinaten van de praktijken
+gezocht worden.'''
+prakStraat = []
+prakNummer = []
+prakToevoeging = []
+prakPostcode =[]
+prakWoonplaats = []
+prAdres=[]
+
+def adresVerzamelaar(lst):
+    for x in lst:
+         prakStraat.append(x[5])
+         prakNummer.append(x[6]) 
+         prakToevoeging.append(x[7])
+         prakPostcode.append(x[8])
+         prakWoonplaats.append(x[9])     
+                
+adresVerzamelaar(prakAdres)
+
+def lijstmaker(lijst1,lijst2,lijst3,lijst4):
+    for i in lijst1,lijst2,lijst3,lijst4:
+        for item in i:
+            prAdres.append(item)
+
+lijstmaker(prakStraat,prakNummer,prakPostcode,prakWoonplaats)
+
 '''Sorteer de lijst zodat een volledig adres per huisarts als list wordt opgeslagen.'''
 prakAdressort = []
 def adresSort(lijstje):
-    for i in range(len(prakData)):
-        prakAdressort.append(lijstje[i:len(lijstje)+i:len(prakData)]) 
+    for i in range(len(prakAdres)):
+        prakAdressort.append(lijstje[i:len(lijstje)+i:len(prakAdres)]) 
       
-adresSort(prakAdres)
+adresSort(prAdres)
 
+'''Zoek met behulp van de net gemaakte adreslijst (prakAdressort)
+de bijbehorende coordinaten.'''
 adresCor = []
 def adresGeo(lst):
     from time import sleep
@@ -94,12 +144,14 @@ def adresGeo(lst):
              adresCor.append("onbekend")
              sleep(1)
              
-'''Method die de adresGeo method gebruikt om de coördinaten van alle adressen 
-te vinden'''
-adresGeo(prakAdressort[0:len(prakAdressort)])praktijkNamenCoordinaten = []
+adresGeo(prakAdressort[0:len(prakAdressort)])
+
+'''Voeg de nummers van de praktijken aan de coordinaten toe, 
+zodat deze gekoppeld kunnen worden aan de juiste praktijken'''
+praktijkNamenCoordinaten = []
 def prakEnCor(lst1, lst2):
     for item in lst1:
-        praktijkNamenCoordinaten.append(item[1])
+        praktijkNamenCoordinaten.append(item[0])
     for item in lst2:
         praktijkNamenCoordinaten.append(item[0])
     for item in lst2:
@@ -107,15 +159,23 @@ def prakEnCor(lst1, lst2):
 
 prakEnCor(prSort, adresCor)
 
-'''Het ophalen van de coordinaten en naam toevoegen.'''
-gesorteerdeNamenEnCoordinaten = []
+gesorteerdNummerEnCoordinaten = []
 def corSort(lijstje):
     for i in range(len(praktijk)):
-        gesorteerdeNamenEnCoordinaten.append(lijstje[i:len(lijstje)+i:len(praktijk)])
+        gesorteerdNummerEnCoordinaten.append(lijstje[i:len(lijstje)+i:len(praktijk)])
         
 corSort(praktijkNamenCoordinaten)
 
-'''Database'''
+'''Vervang het nummer van de praktijk voor de naam van de praktijk.'''
+def koppelingPrCor(lst1, lst2):
+    for item in lst1:
+        for obj in lst2:
+            if item[0] == obj[0]:
+                obj.append(item[1])
+        
+koppelingPrCor(prSort, gesorteerdNummerEnCoordinaten) 
+
+'''Voeg de coordinaten toe aan de praktijken in de database.'''
 import sqlite3
 
 db = sqlite3.connect('specialismen_db.sqlite')
@@ -123,22 +183,24 @@ db = sqlite3.connect('specialismen_db.sqlite')
 #tabel voor Huisartsen aanmaken
 cursor = db.cursor()
 cursor.execute('''
-   CREATE TABLE IF NOT EXISTS Praktijken1(naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
+   CREATE TABLE IF NOT EXISTS Praktijken(naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
 ''')
 
-#data uit haData en adresCor inlezen in tabel Huisartsen
-for lst in prSort:
-   cursor.execute('''INSERT INTO Praktijken1(naam, telnr, straat, huisnummer, toevoeging, postcode, woonplaats)
-                VALUES(?,?,?,?,?,?,?)''', (lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7]))
-
-for lst in gesorteerdeNamenEnCoordinaten:
+for lst in gesorteerdNummerEnCoordinaten:
     if lst[1] != 'o' and lst [2] != 'n':
-        sql = "update Praktijken1 set lat = %f, long = %f where naam = %s" % (lst[1], lst[2], lst[0])
+        sql = "update Praktijken set lat = %f, long = %f where naam = %s" % (lst[1], lst[2], lst[0])
         cursor.execute(sql)
 
 #wijzigingen opslaan en connectie met db verbreken
 db.commit()
 cursor.close()
+
+
+
+
+
+
+
 
 
 
