@@ -99,18 +99,40 @@ kopSort(kopHaPr)
 
 '''Vervang in de lijst met koppelingen de nummers van de huisartsen en
 praktijken door de namen van de huisartsen en praktijken.'''
-haPrNaam = []
 def koppeling(lst1, lst2, lst3):
     for item in lst1:
         for obj in lst3:
             if item[0] == obj[2]:
-                haPrNaam.append(obj[3])
+                item[0] = obj[3]
         for ding in lst2:
             if item[1] == ding[0]:
-                haPrNaam.append(ding[1])
+                item[1] = ding[1]
         
 
 koppeling(koppelSort, prSort, haData)
+
+'''Schrijf de gegenereerde data weg naar de specialismendatabase
+in een tabel genaamd Huisartsen.'''
+import sqlite3
+
+db = sqlite3.connect('specialismen_db.sqlite')
+
+cursor = db.cursor()
+cursor.execute('''
+   CREATE TABLE IF NOT EXISTS Huisartsen(huisarts TEXT, praktijk TEXT)
+''')
+
+for lst in koppelSort:
+   cursor.execute('''INSERT INTO Huisartsen(huisarts, praktijk)
+                VALUES(?,?)''', (lst[0], lst[1]))
+
+db.commit()
+cursor.close()
+
+
+
+
+            
 
 
 
