@@ -1,5 +1,7 @@
 import socket
 import csv
+
+praktijk = []
 f = open('vektis_agb_praktijk.csv', 'r', encoding = 'UTF-8')
 csvreader = csv.reader(f)
 
