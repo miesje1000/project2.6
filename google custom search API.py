@@ -127,16 +127,12 @@ vullen(13, plaatsNamen)
 naamVullen()
 websiteHuisartsen = [0] 
  
-zoekHuisarts('0725061263', 'van Geldern')
-
-#namen.insert(1, 'van Geldern')
-#telefoonnummers.insert(1, '0725061263')
 
 
-#for x in range(1, 5): #len(dataSet)):      
-#   websiteHuisartsen.append(zoekHuisarts(telefoonnummers[x], namen[x]))
-#   
-#for x in range(1, 20):
-#   websiteHuisartsen.append(zoekHuisarts3(namen[x] + ' ' + plaatsNamen[x]))
+for x in range(1, len(dataSet)):      
+   websiteHuisartsen.append(zoekHuisarts(telefoonnummers[x], namen[x]))
+   
+for x in range(1, len(dataSet)):
+   websiteHuisartsen.append(zoekHuisarts3(namen[x] + ' ' + plaatsNamen[x]))
 
 #zoekHuisarts()
