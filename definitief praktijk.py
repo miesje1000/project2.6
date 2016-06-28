@@ -2,16 +2,13 @@ import socket
 import csv
 
 praktijk = []
-f = open('vektis_agb_praktijk.csv', 'r', encoding = 'UTF-8')
-csvreader = csv.reader(f)
 
 def zoekpraktijk(lst):
-    for item in lst:
-        if '01' in item:
-            praktijk.append(item)
-            
-zoekpraktijk(csvreader)
-f.close()
+    for col in lst:
+        if col[2] == int('01'): 
+            praktijk.append(col)
+
+zoekhuisarts(Praktijkcsv)
 
 prNr = []
 prNa1 = []
