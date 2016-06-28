@@ -27,7 +27,7 @@ def telefoonnummerBewerken(nummer):
          
 
 
-def zoekHuisarts(nummer, naam):
+def zoekPraktijk(nummer, naam):
     
     nummerAangepast = telefoonnummerBewerken(nummer)
     zoekTerm = nummerAangepast + ' ' + naam
@@ -60,7 +60,7 @@ def zoekHuisarts(nummer, naam):
     
     
     
-def zoekHuisarts3(query):
+def zoekPraktijk3(query):
     
     api_key = 'AIzaSyC8-TpYB8BnbpdQc1qiCMGtydu40WLseCI'
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
