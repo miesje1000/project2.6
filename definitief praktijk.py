@@ -165,15 +165,6 @@ def corSort(lijstje):
         
 corSort(praktijkNamenCoordinaten)
 
-#'''Vervang het nummer van de praktijk voor de naam van de praktijk.'''
-#def koppelingPrCor(lst1, lst2):
-#    for item in lst1:
-#        for obj in lst2:
-#            if item[0] == obj[0]:
-#                obj[0] = item[1]
-#        
-#koppelingPrCor(prSort, gesorteerdNummerEnCoordinaten) 
-
 '''Voeg de coordinaten toe aan de praktijken in de database.'''
 import sqlite3
 
