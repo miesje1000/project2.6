@@ -77,13 +77,13 @@ db = sqlite3.connect('specialismen_db.sqlite')
 #tabel voor Huisartsen aanmaken
 cursor = db.cursor()
 cursor.execute('''
-   CREATE TABLE IF NOT EXISTS Praktijken(naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
+   CREATE TABLE IF NOT EXISTS Praktijken(id INT PRIMARY KEY, naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
 ''')
 
 #data uit haData en adresCor inlezen in tabel Huisartsen
 for lst in prSort:
-   cursor.execute('''INSERT INTO Praktijken(naam, telnr, straat, huisnummer, toevoeging, postcode, woonplaats)
-                VALUES(?,?,?,?,?,?,?)''', (lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7]))
+   cursor.execute('''INSERT INTO Praktijken(id, naam, telnr, straat, huisnummer, toevoeging, postcode, woonplaats)
+                VALUES(?,?,?,?,?,?,?,?)''', (lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7]))
 
 #wijzigingen opslaan en connectie met db verbreken
 db.commit()
@@ -165,14 +165,14 @@ def corSort(lijstje):
         
 corSort(praktijkNamenCoordinaten)
 
-'''Vervang het nummer van de praktijk voor de naam van de praktijk.'''
-def koppelingPrCor(lst1, lst2):
-    for item in lst1:
-        for obj in lst2:
-            if item[0] == obj[0]:
-                obj[0] = item[1]
-        
-koppelingPrCor(prSort, gesorteerdNummerEnCoordinaten) 
+#'''Vervang het nummer van de praktijk voor de naam van de praktijk.'''
+#def koppelingPrCor(lst1, lst2):
+#    for item in lst1:
+#        for obj in lst2:
+#            if item[0] == obj[0]:
+#                obj[0] = item[1]
+#        
+#koppelingPrCor(prSort, gesorteerdNummerEnCoordinaten) 
 
 '''Voeg de coordinaten toe aan de praktijken in de database.'''
 import sqlite3
@@ -182,25 +182,14 @@ db = sqlite3.connect('specialismen_db.sqlite')
 #tabel voor Huisartsen aanmaken
 cursor = db.cursor()
 cursor.execute('''
-   CREATE TABLE IF NOT EXISTS Praktijken(naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
+   CREATE TABLE IF NOT EXISTS Praktijken(id INT PRIMARY KEY, naam TEXT, telnr TEXT, straat TEXT, huisnummer INT, toevoeging TEXT, postcode TEXT, woonplaats TEXT, lat REAL, long REAL, website TEXT)
 ''')
 
 for lst in gesorteerdNummerEnCoordinaten:
     if lst[1] != 'o' and lst [2] != 'n':
-        sql = "update Praktijken set lat = %f, long = %f where naam = %s" % (lst[1], lst[2], lst[0])
+        sql = "update Praktijken set lat = %f, long = %f where id = %d" % (lst[1], lst[2], lst[0])
         cursor.execute(sql)
 
 #wijzigingen opslaan en connectie met db verbreken
 db.commit()
 cursor.close()
-
-
-
-
-
-
-
-
-
-
-
