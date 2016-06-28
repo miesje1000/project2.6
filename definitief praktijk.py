@@ -1,17 +1,11 @@
 import socket
-import csv
-
 praktijk = []
-f = open('vektis_agb_praktijk.csv', 'r', encoding = 'UTF-8')
-csvreader = csv.reader(f)
-
 def zoekpraktijk(lst):
-    for item in lst:
-        if '01' in item:
-            praktijk.append(item)
-            
-zoekpraktijk(csvreader)
-f.close()
+    for col in lst:
+        if col[2] == int('01'):
+            praktijk.append(col)
+
+zoekpraktijk(Praktijkcsv)
 
 prNr = []
 prNa1 = []
@@ -51,17 +45,14 @@ for item in prSort:
     
 '''Lees het bestand met praktijk adressen in.'''
 
-g = open('vektis_agb_praktijk.csv', 'r', encoding = 'UTF-8')
-csvReaderPraktijkadres = csv.reader(g)
-
 prakAdres = []
-def zoekhuisarts(lst):
-    for item in lst:
-        if '01' in item: 
-            prakAdres.append(item)
 
-zoekhuisarts(csvReaderPraktijkadres)
-g.close()
+def zoekhuisarts(lst):
+    for col in lst:
+        if col[2] == int('01'): 
+            prakAdres.append(col)
+
+zoekhuisarts(PraktijkAdrescsv)
 
 '''Voeg het adres toe door middel van het nummer van de praktijk.''' 
 def koppeling(lst1, lst2):
