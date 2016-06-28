@@ -1,12 +1,11 @@
-'''Laadt eerst het bestand praktijkcsv in. Daarna kun je 
-een lijst met nummer, naam en telefoonnummer maken.'''
+import socket
 praktijk = []
 def zoekpraktijk(lst):
     for col in lst:
         if col[2] == int('01'):
             praktijk.append(col)
 
-zoekpraktijk(praktijkcsv)
+zoekpraktijk(Praktijkcsv)
 
 prNr = []
 prNa1 = []
@@ -53,7 +52,7 @@ def zoekhuisarts(lst):
         if col[2] == int('01'): 
             prakAdres.append(col)
 
-zoekhuisarts(praktijkadrescsv)
+zoekhuisarts(PraktijkAdrescsv)
 
 '''Voeg het adres toe door middel van het nummer van de praktijk.''' 
 def koppeling(lst1, lst2):
@@ -151,18 +150,18 @@ zodat deze gekoppeld kunnen worden aan de juiste praktijken'''
 praktijkNamenCoordinaten = []
 def prakEnCor(lst1, lst2):
     for item in lst1:
-        praktijkNamenCoordinaten.append(item[0])
+        praktijkNamenCoordinaten.append(item[3])
     for item in lst2:
         praktijkNamenCoordinaten.append(item[0])
     for item in lst2:
         praktijkNamenCoordinaten.append(item[1])
 
-prakEnCor(prSort, adresCor)
+prakEnCor(prakAdres, adresCor)
 
 gesorteerdNummerEnCoordinaten = []
 def corSort(lijstje):
-    for i in range(len(praktijk)):
-        gesorteerdNummerEnCoordinaten.append(lijstje[i:len(lijstje)+i:len(praktijk)])
+    for i in range(len(prakAdres)):
+        gesorteerdNummerEnCoordinaten.append(lijstje[i:len(lijstje)+i:len(prakAdres)])
         
 corSort(praktijkNamenCoordinaten)
 
@@ -171,7 +170,7 @@ def koppelingPrCor(lst1, lst2):
     for item in lst1:
         for obj in lst2:
             if item[0] == obj[0]:
-                obj.append(item[1])
+                obj[0] = item[1]
         
 koppelingPrCor(prSort, gesorteerdNummerEnCoordinaten) 
 
