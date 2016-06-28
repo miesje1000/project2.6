@@ -51,7 +51,7 @@ for item in prSort:
     
 '''Lees het bestand met praktijk adressen in.'''
 
-g = open('vektis_agb_praktijk.csv', 'r', encoding = 'UTF-8')
+g = open('vektis_agb_praktijk_adres.csv', 'r', encoding = 'UTF-8')
 csvReaderPraktijkadres = csv.reader(g)
 
 prakAdres = []
