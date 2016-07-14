@@ -9,6 +9,19 @@ de praktijken en de koppeling tussen deze twee.'''
 import csv  
 import sqlite3
 
+praktijk = []
+haData = []
+prNr = []
+prNa1 = []
+prNa2 = []
+pr = []
+prSort = []
+koppel = []
+kopHa = []
+kopPr = []
+kopHaPr = []
+koppelSort = []
+
 '''Leest het bijgevoegde csv bestand en bekijkt welke rijen als zorgverlenersoort '01' hebben.
    Dat geeft aan dat de rij gegevens over een huisarts bevat.
    De functie slaat deze gevonden rijen in een nieuwe lijst op.'''
@@ -43,7 +56,7 @@ def listMakenNaam():
    De functie slaat deze gevonden rijen in een nieuwe lijst op.'''
    
 def praktijkZoeken():
-    with open('Praktijk.csv', encoding='utf-8', errors='ignore') as csvfile:
+    with open('vektis_agb_praktijk.csv', encoding='utf-8', errors='ignore') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             if row[2] == '01':
@@ -105,7 +118,7 @@ def kolomSamenvoegen():
    Dat geeft aan dat de rij gegevens over een huisarts bevat.
    De functie slaat deze gevonden rijen in een nieuwe lijst op.'''
 def bestandInlezen():  
-    with open('Koppeling.csv', encoding='utf-8', errors='ignore') as csvfile:
+    with open('vektis_agb_koppeling_zorgverlener_praktijk.csv', encoding='utf-8', errors='ignore') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             if row[2] == '01':
@@ -133,9 +146,6 @@ def haEnPr(lst1, lst2):
         kopHaPr.append(item)
     for item in lst2:
         kopHaPr.append(item)
-        
-
-
 
 '''
 .. function:: kopSort(lst)
@@ -147,8 +157,6 @@ def kopSort(lst):
     for i in range(len(kopHa)):
         koppelSort.append(lst[i:len(kopHaPr)+i:len(kopHa)])
         
-
-
 '''
 .. function:: koppeling(lst1, lst2, lst3)
    Vervang in de lijst met koppelingen de nummers van de huisartsen en
@@ -187,28 +195,16 @@ def databaseInvullen():
     cursor.close()
     
 def main():  
-    haData = []
     gegevensHuisartsZoeken()
     listMakenNaam()
-    praktijk = []
     praktijkZoeken()
-    prNr = []
-    prNa1 = []
-    prNa2 = []
     praktijkVullen()
-    pr = []
     prSamenvoegen(prNr, prNa1, prNa2)
-    prSort = []
     praktijkSort(pr)
     kolomSamenvoegen()
-    koppel = []
     bestandInlezen()
-    kopHa = []
-    kopPr = []
     nummersSplitsen()
-    kopHaPr = []
     haEnPr(kopHa, kopPr)
-    koppelSort = []
     kopSort(kopHaPr)
     koppeling(koppelSort, prSort, haData)
     databaseInvullen()
